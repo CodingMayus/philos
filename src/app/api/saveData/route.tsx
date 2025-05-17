@@ -17,9 +17,9 @@ export async function POST(request: Request) {
     // const name = username;
     // const { name,password } = body;
    
-
+    const history = "";
     // e.g. Ins ert new user into your DB   
-    const newUser = { email, password };
+    const newUser = { email, password ,history};
     await collection.insertOne(newUser);
 
 

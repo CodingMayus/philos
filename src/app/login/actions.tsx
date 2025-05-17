@@ -4,14 +4,14 @@ import { z } from "zod";
 import { createSession, deleteSession } from "../lib/session";
 import { redirect } from "next/navigation";
 
-const testUser = {
-  id: "1",
-  email: "contact@cosdensolutions.io",
-  password: "12345678",
-};
+// const testUser = {
+//   id: "1",
+//   email: "contact@cosdensolutions.io",
+//   password: "12345678",
+// };
 
 async function getUsers() {
-    const res = await fetch("http://localhost:3001/api/getData", {
+    const res = await fetch("http://localhost:3000/api/getData", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -69,7 +69,14 @@ if (!userExists) {
     };
 }
 
-  await createSession(testUser.id);
+  const matchedUser = users.find(
+    (user: { email: string; password: string }) =>
+      user.email === email && user.password === password
+  );
+
+  if (matchedUser) {
+    await createSession(matchedUser._id);
+  }
 
   redirect("/dashboard");
 }

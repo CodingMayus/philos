@@ -19,6 +19,8 @@ export default function ThreeJSScene() {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   
+
+  
   // Handle sending message to API
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -140,11 +142,14 @@ export default function ThreeJSScene() {
       floor.position.y = -11;
       scene.add(floor);
     };
-    
+    let stacy_txt = new THREE.TextureLoader().load('stacy.jpg');
+stacy_txt.flipY = false;
+const stacy_mtl = new THREE.MeshPhongMaterial({ map: stacy_txt, skinning: true });
+
     // Load 3D model with GLTF loader
     const loadModel = (scene) => {
       const loader = new GLTFLoader();
-      
+
       // Replace with your model URL
       loader.load(
         'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/stacy_lightweight.glb',
@@ -156,9 +161,21 @@ export default function ThreeJSScene() {
             if (object.isMesh) {
               object.castShadow = true;
               object.receiveShadow = true;
+              object.material = stacy_mtl; // Apply the material to the model
             }
           });
+          let stacy_txt = new THREE.TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/stacy.jpg');
+          stacy_txt.flipY = false; // we flip the texture so that its the right way up
+
+          const stacy_mtl = new THREE.MeshPhongMaterial({
+            map: stacy_txt,
+            color: 0xffffff,
+            skinning: true
+          });
           
+          // We've loaded this earlier
+
+
           // Position the model
           model.position.set(0, -10, 0);
           model.scale.set(10, 10, 10);
@@ -304,6 +321,34 @@ export default function ThreeJSScene() {
       animations[animationName].reset().fadeIn(0.5).play();
     }
   };
+
+
+
+
+
+  
+  const startRecording = () => {
+    setIsRecording(true);
+    // Create a new SpeechRecognition instance and configure it
+    recognitionRef.current = new window.webkitSpeechRecognition();
+    recognitionRef.current.continuous = true;
+    recognitionRef.current.interimResults = true;
+
+    // Event handler for speech recognition results
+    recognitionRef.current.onresult = (event: any) => {
+      const { transcript } = event.results[event.results.length - 1][0];
+
+      // Log the recognition results and update the transcript state
+      console.log(event.results);
+      setTranscript(transcript);
+    };
+
+    // Start the speech recognition
+    recognitionRef.current.start();
+  };
+
+
+
 
   return (
     <div className="relative w-full h-screen">
