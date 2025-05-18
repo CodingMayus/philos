@@ -1,4 +1,5 @@
 'use client';
+
 import { logout } from "../login/actions";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,7 +22,7 @@ export default function Navbar() {
           {navItems.map(({ name, href, icon: Icon }) => {
             const isActive = pathname === href;
             return (
-              <Link
+              <a
                 key={name}
                 href={href}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors
@@ -30,23 +31,21 @@ export default function Navbar() {
               >
                 <Icon size={20} />
                 {name}
-              </Link>
+              </a>
             );
           })}
         </div>
 
-        {/* Right-Aligned Logout Icon */}
-        <div>
+        {/* Right-Aligned Logout Button using form */}
+        <form action={logout}>
           <button
-            onClick={() => {
-logout();
-            }}
+            type="submit"
             className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
           >
             <LogOut size={20} />
             Log out
           </button>
-        </div>
+        </form>
       </div>
     </nav>
   );
