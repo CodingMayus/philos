@@ -595,8 +595,8 @@ export default function ThreeJSScene() {
                 sceneRef.current.userData.animations = animations;
                 
                 // Play idle animation by default
-                if (animations['shrug']) {
-                  animations['shrug'].play();
+                if (animations['idle']) {
+                  animations['idle'].play();
                 }
               }
               

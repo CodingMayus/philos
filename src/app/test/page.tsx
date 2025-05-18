@@ -181,9 +181,9 @@ declare global {
 }
 // Sends text to Microsoft Azure Text-to-Speech API and returns the audio blob
  const sendToMicrosoft = async (botres: string) => {
-  alert("made it here")
+  // alert("made it here")
   const subscriptionKey = process.env.TEXT_TO_SPEECH_API_KEY; // Use NEXT_PUBLIC_ for client-side env vars
-  alert(subscriptionKey)
+  // alert(subscriptionKey)
   const region = "eastus";
   const endpoint = `https://eastus.tts.speech.microsoft.com/cognitiveservices/v1`;
 
@@ -218,7 +218,7 @@ declare global {
       console.error("Text-to-Speech API error:", errorText);
       return null;
     }else{
-      alert("Audio generated successfully");
+      // alert("Audio generated successfully");
     }
 
     // Get audio as a Blob
@@ -272,7 +272,7 @@ const reeeee = await sendToMicrosoft(data.response);
       body: JSON.stringify({ _id: userId, addedString: combined }),
     });
 
-    alert(data.response)
+     alert(data.response)
 
     return data.text;
   } catch (error) {
@@ -402,7 +402,7 @@ export default function MicrophoneComponent() {
   const updatedHistory=  await saveResponse.json();
 
         //two values will be given, the history, and what the user just said.
-        alert(updatedHistory);
+        // alert(updatedHistory);
       const res = await sendToBot(updatedHistory);
      
    
