@@ -179,9 +179,64 @@ declare global {
     webkitSpeechRecognition: any;
   }
 }
+// Sends text to Microsoft Azure Text-to-Speech API and returns the audio blob
+ const sendToMicrosoft = async (botres: string) => {
+  alert("made it here")
+  const subscriptionKey = process.env.TEXT_TO_SPEECH_API_KEY; // Use NEXT_PUBLIC_ for client-side env vars
+  alert(subscriptionKey)
+  const region = "eastus";
+  const endpoint = `https://eastus.tts.speech.microsoft.com/cognitiveservices/v1`;
+
+  // if (!subscriptionKey) {
+  //   console.error("Missing Azure Text-to-Speech subscription key.");
+  //   return null;
+  // }
+
+  // Construct SSML payload
+  const ssml = `
+    <speak version="1.0" xml:lang="en-CA">
+      <voice xml:lang="en-CA" xml:gender="Female" name="en-CA-ClaraNeural">
+        ${botres}
+      </voice>
+    </speak>
+  `;
+
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Ocp-Apim-Subscription-Key": "",
+        "Content-Type": "application/ssml+xml",
+        "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0",
+      },
+      body: ssml,
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("Text-to-Speech API error:", errorText);
+      return null;
+    }else{
+      alert("Audio generated successfully");
+    }
+
+    // Get audio as a Blob
+    const audioBlob = await res.blob();
+    // Play the audio immediately
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+    audio.play();
+
+    return audioBlob;
+  } catch (error) {
+    console.error("Error calling Microsoft TTS API:", error);
+    return null;
+  }
+};
 
 // Frontend code (fixed)
-const sendToBot = async (history: string): Promise<string | null> => {
+ const sendToBot = async (history: string): Promise<string | null> => {
   try {
     const res = await fetch('http://localhost:5000/generate', {
       method: 'POST',
@@ -201,12 +256,20 @@ const sendToBot = async (history: string): Promise<string | null> => {
         
     const data = await res.json();
     console.log('Bot Response:', data.response);
+    
+const reeeee = await sendToMicrosoft(data.response);
+
+
+    //send to text to audio
+    //then save it to the history !
+
+    const combined = "Bot:"+data.response;
      await fetch("/api/saveMessage", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ _id: userId, addedString: "Bot Response:"+data.response }),
+      body: JSON.stringify({ _id: userId, addedString: combined }),
     });
 
     alert(data.response)
@@ -225,14 +288,13 @@ export default function MicrophoneComponent() {
   const [recordingComplete, setRecordingComplete] = useState(false);
   const [transcript, setTranscript] = useState(""); // Current interim result
   const [totalTranscript, setTotalTranscript] = useState(""); // Complete transcription
-  
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef<any>(null);
   // Reference to store transcript segments
   const finalTranscriptsRef = useRef<string[]>([]);
 
   // Function to start recording
-  const startRecording = () => {
+   const startRecording = () => {
     setIsRecording(true);
     setRecordingComplete(false);
     setTranscript("");
@@ -296,7 +358,7 @@ export default function MicrophoneComponent() {
   }, []);
 
   // Function to stop recording
-  const stopRecording = async () => {
+   const stopRecording = async () => {
     if (recognitionRef.current) {
       // Stop the speech recognition and mark recording as complete
       recognitionRef.current.stop();
@@ -335,7 +397,7 @@ export default function MicrophoneComponent() {
         });
         
         if (saveResponse.status === 200) {
-          alert("Message sent successfully Please Wait for a response");
+          // alert("Message sent successfully Please Wait for a response");
         }
   const updatedHistory=  await saveResponse.json();
 
@@ -361,7 +423,7 @@ export default function MicrophoneComponent() {
 
   // Render the microphone component with appropriate UI based on recording state
   return (
-    <div className="flex items-center justify-center h-screen w-full">
+    <div className="flex flex-col-reverse h-screen w-full">
       <div className="w-full">
         {(isRecording || recordingComplete) && (
           <div className="w-1/4 m-auto rounded-md border p-4 bg-white">
@@ -381,14 +443,27 @@ export default function MicrophoneComponent() {
               )}
             </div>
 
-            <div className="border rounded-md p-2 h-full mt-4">
-              {isRecording && transcript && (
-                <p className="mb-2 italic text-gray-500">{transcript}</p>
-              )}
-              {totalTranscript && (
-                <p className="mb-0 font-medium">{totalTranscript}</p>
-              )}
-            </div>
+          <div className="bg-white rounded-md p-4 mt-4 border border-gray-200 shadow space-y-2">
+            {isRecording && transcript && (
+              <p className="italic text-sm text-gray-600">{transcript}</p>
+            )}
+            {totalTranscript && (
+              <p className="text-base text-black-900">{totalTranscript}</p>
+            )}
+            {recordingComplete && (
+              <button
+                className="mt-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm text-gray-700"
+                onClick={() => {
+                  setRecordingComplete(false);
+                  setTranscript("");
+                  setTotalTranscript("");
+                }}
+              >
+                Close
+              </button>
+            )}
+          </div>
+
           </div>
         )}
 
@@ -427,6 +502,7 @@ export default function MicrophoneComponent() {
           )}
         </div>
       </div>
+      
     </div>
   );
 }

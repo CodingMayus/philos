@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     const updatedUser = await collection.findOne({ _id: objectId });
 
     return new Response(JSON.stringify(updatedHistory
-
+        
     ), {
       status: 200,
       headers: { "Content-Type": "application/json" },

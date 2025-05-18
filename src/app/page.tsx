@@ -1,77 +1,44 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import logo from '../logo.jpg';
+
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-  
+    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-purple-100 via-violet-200 to-indigo-100 text-gray-800 font-[family-name:var(--font-geist-sans)] p-8 sm:p-20">
+      <main className="flex flex-col items-center text-center sm:text-left gap-12 max-w-3xl mx-auto mt-20">
+        
+        {/* Logo above the title */}
+        <Image src={logo} alt="Philo Logo" width={120} height={120} className="mx-auto sm:mx-0 rounded-full shadow-lg" />
 
-        For those that are feel alone. Someone You Can Always Talk To.
-      
-        <div className="flex gap-4 items-center flex-col sm:flex-row justify-center">
-          <Link href="/login"
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-              target="_blank"
-            rel="noopener noreferrer"
+        <div className="space-y-6">
+          <h1 className="text-5xl font-bold text-indigo-700 leading-tight">
+            You Were Never Meant to Walk Alone
+          </h1>
+          <p className="text-lg text-gray-600 max-w-prose">
+            Welcome to <span className="font-semibold text-indigo-600">Philo</span> — your digital companion in a noisy world. Whether you're feeling isolated or just need someone who listens, Philo is here. No judgment. Just presence. Just friendship.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
+          <Link
+            href="/login"
+            className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 font-semibold text-sm shadow-lg transition duration-300"
           >
             Get Started
           </Link>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/about"
+            className="rounded-full border border-indigo-300 hover:bg-indigo-100 text-indigo-600 px-6 py-3 font-medium text-sm transition duration-300"
           >
-            Learn More 
-          </a>
+            Learn More
+          </Link>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="mt-32 mb-4 flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+        <p className="text-center w-full">© {new Date().getFullYear()} Philo. All rights reserved.</p>
       </footer>
     </div>
   );

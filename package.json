@@ -9,15 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tensorflow-models/facemesh": "^0.0.5",
+    "@tensorflow/tfjs": "^4.22.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cookies": "^0.9.1",
+    "face-api.js": "^0.22.2",
     "jose": "^6.0.11",
     "lucide-react": "^0.511.0",
     "mongodb": "^6.16.0",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-webcam": "^7.2.0",
+    "tensorflow-models-face-landmarks-detection": "^1.0.3-4.16.1",
     "three": "^0.176.0",
     "zod": "^3.24.4"
   },
